@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    
+    <title>PostIt</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Fonts -->
+    <link
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Righteous%7CMerriweather:300,300i,400,400i,700,700i"
+      rel="stylesheet"
+    />
+    <!-- Custom styles for this template -->
+    <link href="/assets/css/mediumish.css" rel="stylesheet" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+  </head>
+  <body>
+    <!-- Begin Nav
+================================================== -->
+    <nav
+      class="navbar navbar-toggleable-md navbar-light bg-white fixed-top mediumnavigation"
+    >
+      <button
+        class="navbar-toggler navbar-toggler-right"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarsExampleDefault"
+        aria-controls="navbarsExampleDefault"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="container">
+        <!-- Begin Logo -->
+        <a class="navbar-brand" href="/home">
+          <!-- <img src="assets/img/logo.png" alt="logo" /> -->
+          <h1>PostIt</h1>
+        </a>
+        <!-- End Logo -->
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+          <!-- Begin Menu -->
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="index.html">
+                Home <span class="sr-only">(current)</span></a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/compose"> Post</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="author.html"> About Us</a>
+            </li>
+          </ul>
+          <!-- End Menu -->
+          <!-- Begin Search -->
+          <form class="form-inline my-2 my-lg-0" action="/search" method="post" enctype="multipart/form-data">
+           
+              <input
+              class="form-control mr-sm-2"
+              type="text"
+              name="setitle"
+              placeholder="Search"
+            />
+            
+           
+          <span class="search-icon"
+              ><svg
+                class="svgIcon-use"
+                width="25"
+                height="25"
+                viewbox="0 0 25 25"
+              >
+                <path
+                  d="M20.067 18.933l-4.157-4.157a6 6 0 1 0-.884.884l4.157 4.157a.624.624 0 1 0 .884-.884zM6.5 11c0-2.62 2.13-4.75 4.75-4.75S16 8.38 16 11s-2.13 4.75-4.75 4.75S6.5 13.62 6.5 11z"
+                ></path></svg
+            ></span>
+            
+          </form>
+          <!-- End Search -->
+        </div>
+      </div>
+    </nav>
+    <!-- End Nav
+================================================== -->
+
+    <!-- Begin Site Title
+================================================== -->
+    <div class="container">
+      <div class="mainheading">
+        <!-- <h1 class="sitetitle">PostIt</h1>
+        <p class="lead">
+          "A blog is a conversation, not a monologue." - Jeff Jarvis
+        </p> -->
+      </div>
+      <!-- End Site Title
+================================================== -->
+
+      <!-- Begin Featured
+	================================================== -->
+      <section class="featured-posts">
+        <div class="section-title">
+          <h2><span>Featured</span></h2>
+        </div>
+        <div class="card-columns listfeaturedtag">
+          <% ss.forEach(function(post){%> <% if (typeof post.content ==
+            'undefined' ) { %>
+            <p>no content</p>
+            <% } else { %>
+          <div class="card">
+            <div class="row">
+              <div class="col-md-5 wrapthumbnail">
+                <a href="/seper/<%=post._id%>" enctype="multipart/form-data">
+                  <img
+                    class="thumbnail"
+                    src="data:post/<%=post.image.contentType%>;base64,
+                    <%=post.image.data.toString('base64')%>"
+                  >
+                </img>
+                </a>
+              </div>
+              <div class="col-md-7">
+                <div class="card-block">
+                  <h2 class="card-title">
+                    <span><%=post.title%></span>
+                  </h2>
+                  <h4 class="card-text">
+                    <%= post.content.substring(0, 150) %>...
+                  </h4>
+                  <div class="metafooter">
+                    <div class="wrapfooter">
+                      <span class="meta-footer-thumb">
+                        <a href="author.html"
+                          ><img
+                          class="author-thumb"
+                          src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x"
+                          alt="Sal"</a>
+                      </span>
+                      <span class="author-meta">
+                        <span class="post-name"
+                          ><a href="author.html">Steve</a></span
+                        ><br />
+                        <span class="post-date">22 July 2017</span
+                        ><span class="dot"></span
+                        ><span class="post-read">6 min read</span>
+                      </span>
+                      <span class="post-read-more"
+                        ><a href="/feat/<%=post._id%>" title="Remove From Featured"
+                          ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-save" viewBox="0 0 16 16">
+                            <path d="M2 1a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H9.5a1 1 0 0 0-1 1v7.293l2.646-2.647a.5.5 0 0 1 .708.708l-3.5 3.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L7.5 9.293V2a2 2 0 0 1 2-2H14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h2.5a.5.5 0 0 1 0 1H2z"/>
+                          </svg></a
+                      ></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+            <% } %> <%})%>
+          
+
+          
+      </section>
+      <!-- End Featured
+	================================================== -->
+
+      <!-- Begin List Posts
+	================================================== -->
+      <section class="recent-posts">
+        <div class="section-title">
+          <h2><span>All Stories</span></h2>
+        </div>
+        <div class="card-columns listrecent">
+          <!-- begin post -->
+
+          <%ps.forEach(function(post){%> <% if (typeof post.content ==
+          'undefined' ) { %>
+          <p>no content</p>
+          <% } else { %>
+          <div class="card">
+            <a href="/seper/<%=post._id%>" enctype="multipart/form-data">
+              <img
+                class="img-fluid"
+                src="data:post/<%=post.image.contentType%>;base64,
+              <%=post.image.data.toString('base64')%>"
+                alt=""
+              />
+            </a>
+
+            <div class="card-block">
+              <h2 class="card-title">
+               
+                <span><%=post.title%></span>
+              </h2>
+              <h4 class="card-text">
+                <%= post.content.substring(0, 100) %>...
+              </h4>
+              <div class="metafooter">
+                <div class="wrapfooter">
+                  <span class="meta-footer-thumb">
+                    <a href="author.html"
+                      ><img
+                        class="author-thumb"
+                        src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x"
+                        
+                    /></a>
+                  </span>
+                  <span class="author-meta">
+                    <span class="post-name"><a href="author.html">Sal</a></span
+                    ><br />
+                    <span class="post-date"><%=today%></span
+                    >
+                    
+                  </span>
+                  <span class="post-read-more"
+                    ><a href="/delete/<%=post._id%>" title="Delete">
+                    
+                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="25" enable-background="new 0 0 70 70" viewBox="0 0 70 70" id="delete"><path fill="#2B79C2" d="M10.2800293,18.7193489l2.539978,46.6300011c0.0800171,1.4899902,1.3099976,2.6499634,2.7999878,2.6499634
+                        h38.039978c1.4900513,0,2.7200317-1.1599731,2.8000488-2.6499634L59,18.7193489H10.2800293z M21.8499756,63.7093391H21.789978
+                        c-0.5700073,0-1.039978-0.4400024-1.0700073-1.0100098l-2.0699463-38.2999878
+                        c-0.0300293-0.5800171,0.4199829-1.0900269,1-1.1199951c0.5799561-0.0300293,1.0899658,0.4199829,1.1300049,1.0100098
+                        l2.0699463,38.289978C22.8800049,63.1693611,22.4299927,63.6693611,21.8499756,63.7093391z M35.710022,62.6393318
+                        c0,0.5900269-0.4800415,1.0700073-1.0700073,1.0700073c-0.5900269,0-1.0700073-0.4799805-1.0700073-1.0700073v-38.289978
+                        c0-0.5900269,0.4799805-1.0700073,1.0700073-1.0700073c0.5899658,0,1.0700073,0.4799805,1.0700073,1.0700073V62.6393318z
+                         M48.5599976,62.6993294c-0.039978,0.5700073-0.5100098,1.0100098-1.0700073,1.0100098h-0.0599976
+                        c-0.5800171-0.039978-1.0299683-0.539978-1-1.1300049L48.5,24.2893562c0.0300293-0.5900269,0.539978-1.0400391,1.1199951-1.0100098
+                        c0.5900269,0.0299683,1.039978,0.539978,1.0100098,1.1199951L48.5599976,62.6993294z"></path><path fill="#3B4652" d="M62.4499512,5.7451673c-0.0556717-0.4328971-0.4547501-0.7362375-0.8866043-0.6857672l-16.888588,2.1614294
+                        l-0.321682-2.5157599c-0.2164459-1.6941268-1.7742538-2.8960412-3.4657784-2.6790721L26.5335293,3.863209
+                        c-0.8210487,0.1051025-1.5515633,0.5234311-2.0573025,1.17746c-0.5062618,0.6545486-0.7268734,1.4672718-0.6217709,2.2877994
+                        l0.322073,2.5157604L7.8419409,11.9347658c-0.4334173,0.0556726-0.7409201,0.4537096-0.6857672,0.8871269l0.3938737,3.0781498
+                        c0.0561938,0.4328966,0.4521489,0.7403994,0.8866067,0.6857672l53.721405-6.8753662
+                        c0.4334183-0.0556726,0.740921-0.4537096,0.6857681-0.8871269L62.4499512,5.7451673z M25.9679527,7.0579076
+                        c-0.0327797-0.2559919,0.0364208-0.5093827,0.1940746-0.7133441c0.1576538-0.2044811,0.3860703-0.3350792,0.6420612-0.3678584
+                        l14.3537712-1.8372116c0.5359192-0.0645185,1.0140839,0.308023,1.0817223,0.8361368l0.3215523,2.5156946L26.2900238,9.5737324
+                        L25.9679527,7.0579076z"></path></svg> 
+                     
+                    </a>
+                    <a href="/home/<%=post._id%>" title="Add To Featured" >
+                      <svg
+                        class="svgIcon-use"
+                        width="25"
+                        height="25"
+                        viewbox="0 0 25 25"
+                      >
+                        <path
+                          d="M19 6c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v14.66h.012c.01.103.045.204.12.285a.5.5 0 0 0 .706.03L12.5 16.85l5.662 4.126a.508.508 0 0 0 .708-.03.5.5 0 0 0 .118-.285H19V6zm-6.838 9.97L7 19.636V6c0-.55.45-1 1-1h9c.55 0 1 .45 1 1v13.637l-5.162-3.668a.49.49 0 0 0-.676 0z"
+                          fill-rule="evenodd"
+                        ></path></svg
+                    ></a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end post -->
+          <% } %> <%})%>
+          <!-- begin post -->
+
+          <!-- end post -->
+
+          <!-- begin post -->
+
+          <!-- end post -->
+
+          <!-- begin post -->
+
+          <!-- end post -->
+
+          <!-- begin post -->
+
+          <!-- end post -->
+
+          <!-- begin post -->
+
+          <!-- end post -->
+        </div>
+      </section>
+      <!-- End List Posts
+	================================================== -->
+
+      <!-- Begin Footer
+	================================================== -->
+      <!-- <div class="footer">
+        <p class="pull-left">Copyright &copy; 2017 Your Website Name</p>
+        
+        <div class="clearfix"></div>
+      </div> -->
+      <!-- End Footer
+	================================================== -->
+    </div>
+    <!-- /.container -->
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="assets/js/jquery.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+      integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+      crossorigin="anonymous"
+    ></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/ie10-viewport-bug-workaround.js"></script>
+    <script src="assets/js/mediumish.js"></script>
+  </body>
+</html>
