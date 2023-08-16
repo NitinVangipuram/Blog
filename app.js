@@ -1,27 +1,35 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
+const session = require('express-session');
 const mongoose = require("mongoose");
 const multer = require("multer");
 const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
-const session = require('express-session');
+
 const app = express();
+app.set('view engine', 'ejs');
+
+app.use(session({
+  secret: "our little secret.",
+  resave: false,
+  saveUninitialized: false,
+}));
+
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const passport = require("passport");
+
 const findOrCreate = require("mongoose-findorcreate");
 const passportLocalMongoose = require("passport-local-mongoose");
-mongoose.connect("mongodb+srv://dharhacks:KfYYaWCNDC7ZCqaF@cluster0.kwhiyso.mongodb.net/ultimateDB");
-app.use(express.static("uploads"));
-app.set('view engine', 'ejs');
-app.use(passport.initialize());
-app.use(session({
-  secret:"our little secret.",
-  resave:false,
-  saveUninitialized:false,
 
-}));
+mongoose.connect("mongodb+srv://dharhacks:KfYYaWCNDC7ZCqaF@cluster0.kwhiyso.mongodb.net/ultimateDB");
+
+app.use(express.static("uploads"))
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(passport.initialize());
+
+
 const postSchema={
   title: String,
   content: String,
@@ -29,7 +37,11 @@ const postSchema={
     data:Buffer,
     contentType:String
   },
-  featured:Boolean
+  featured:Boolean,
+  pi: String,
+  nm:String,
+  time:String
+
 };
 
 const Storage = multer.diskStorage({
@@ -51,61 +63,59 @@ const upload = multer({
 const Post = mongoose.model("Post", postSchema);
 app.use(bodyParser.urlencoded({extended: true}));
 
-const userSchema = new mongoose.Schema ({
-  email:String,
-  password:String,
-  googleId:String,
-  secret:String,
+const userSchema = new mongoose.Schema({
+  email: String,
+  password: String,
+  googleId: String,
+  secret: String,
+  profileImage: String, 
 });
+
+
+
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(findOrCreate);
 const User = new mongoose.model("User",userSchema);
-passport.use(User.createStrategy()); 
-passport.serializeUser(function (user, cb) {
-  process.nextTick(function () {
-    cb(null, { id: user.id, username: user.username, name: user.name });
-  });
-});
- 
-passport.deserializeUser(function (user, cb) {
-  process.nextTick(function () {
-    return cb(null, user);
-  });
-});
+passport.use(User.createStrategy());
+
 passport.use(new GoogleStrategy({
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   callbackURL: "https://postit-hd6w.onrender.com/auth/google/secrets",
-  userProfileUrl: "https://www.googleapis.com/oauth2/v3/userinfo"
-},
-function(accessToken, refreshToken, profile, cb) {
-  console.log(profile);
-
-  User.findOrCreate({ googleId: profile.id }, function (err, user) {
-    return cb(err, user);
-  });
-}
-));
-app.get("/",function(req,res){
-  res.render("index");
-})
-app.get("/auth/google", passport.authenticate('google', {
-
-  scope: ['profile']
-
+}, (accessToken, refreshToken, profile, done) => {
+  return done(null, profile);
 }));
-app.get("/secrets",function(req,res){
-User.find({ secret: { $ne: null } }).then(function (foundUsers) {
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.get("/", function(req, res) {
+  res.render("index");
+});
+app.get('/auth/google', passport.authenticate('google', {
+  scope: ['profile']
+}));
+
+app.get('/auth/google/secrets',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    console.log(req.user);
+      res.redirect('/home');
+  }
+);
+app.get("/secrets", function(req, res) {
+  User.find({ secret: { $ne: null } }).then(function(foundUsers) {
     res.redirect("/home");
   });
 });
 
-app.get('/auth/google/secrets', 
-passport.authenticate('google', { failureRedirect: '/login' }),
-function(req, res) {
-  // Successful authentication, redirect home.
-  res.redirect('/secrets');
-});
 
 app.post("/register",function(req,res){
   User.register({username:req.body.username},req.body.password,function(err,user){
@@ -163,23 +173,26 @@ app.post("/login",function(req,res){
  
 
 
-app.get("/home", async function (req, res) {
-  const foundPosts = await Post.find();
-  const saves = await Post. find({featured:true});
-  const date = new Date();
+app.get("/home", async function(req, res) {
 
+  if(req.isAuthenticated()){
 
-   const options = {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-       };
+    const foundPosts = await Post.find();
+    const saves = await Post.find({ featured: true });
+      const x = req.user;
+      res.render("home", { ps: foundPosts, ss: saves,y:x});
+  }
+  else{
+    res.redirect("/");
+  }
 
-const td = date.toLocaleString('en-IN', options);
-
-  res.render("home", {  ps: foundPosts , ss:saves, today:td});
-   
+  
+});
+app.post('/logout', function(req, res, next) {
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.redirect('/');
+  });
 });
 app.get("/compose",function(req,res){
     res.render("post");
@@ -191,14 +204,26 @@ app.post("/compose",function(req,res){
         console.log(err);
     }
     else{
+      const x = req.user;
+      const date = new Date();
+      const options = {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+      const td = date.toLocaleString("en-IN", options);
         const post = new Post({
+          
             title:req.body.n,
             content:req.body.c,
             image:{
                 data:fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
                 contentType:'image/png',
             },
-            featured:false
+            featured:false,
+            pi :x.photos[0].value,
+            nm: x.displayName,
+            time:td
             
         })
              post.save()
@@ -224,9 +249,6 @@ app.get("/seper",function(req,res){
     const reqPostId = req.params.postId;
    
     const post = await Post.findOne({ _id: reqPostId });
-    
-    // post.updateOne({  featured: true });
-    // await post.save();
     await Post.updateOne({_id: reqPostId} ,{ featured: true });
     res.redirect("/home");
   });
