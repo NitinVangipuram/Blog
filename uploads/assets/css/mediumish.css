@@ -193,7 +193,9 @@ span.post-name a,span.post-read-more a:hover {
   box-sizing: border-box;
   color: #FFFFFF;
   cursor: pointer;
-  flex: 0 0 auto;
+  display: flex; /* Added to use flexbox */
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
   font-family: "Inter var",ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
   font-size: 1.125rem;
   font-weight: 600;
@@ -209,9 +211,9 @@ span.post-name a,span.post-read-more a:hover {
   -webkit-user-select: none;
   touch-action: manipulation;
   width: auto;
-  height :36px;
-  
+  height: 36px;
 }
+
 
 .button-40:hover {
   background-color: #374151;
