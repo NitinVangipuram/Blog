@@ -209,6 +209,7 @@ span.post-name a,span.post-read-more a:hover {
   -webkit-user-select: none;
   touch-action: manipulation;
   width: auto;
+  height :36px;
   scale: 0.8;
 }
 
