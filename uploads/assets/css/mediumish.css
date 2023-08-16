@@ -188,45 +188,32 @@ span.post-name a,span.post-read-more a:hover {
 
 
 .button-40 {
-	background-color: #111827;
-	border: 1px solid transparent;
-	border-radius: .75rem;
-	box-sizing: border-box;
-	color: #FFFFFF;
-	cursor: pointer;
 	display: flex; /* Added to use flexbox */
-	align-items: center; /* Center vertically */
-	justify-content: center; /* Center horizontally */
-	font-family: "Inter var",ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-	font-size: 1.125rem;
-	font-weight: 600;
-	line-height: 1.5rem;
-	padding: .75rem 1.2rem;
-	text-align: center;
-	text-decoration: none #6B7280 solid;
-	text-decoration-thickness: auto;
-	transition-duration: .2s;
-	transition-property: background-color,border-color,color,fill,stroke;
-	transition-timing-function: cubic-bezier(.4, 0, 0.2, 1);
-	user-select: none;
-	-webkit-user-select: none;
-	touch-action: manipulation;
-	width: auto;
-	height: 36px;
+  align-items: center; /* Center vertically */
+  justify-content: center;
+    border-radius: 20px;
+    border: 1px solid black;
+    background-color: black;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 14px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
+    height: 36px;
+   
+}
 
-  }
-  
-
-
-.button-40:hover {
-  background-color: #374151;
+.button-40:active {
+    transform: scale(0.95);
 }
 
 .button-40:focus {
-  box-shadow: none;
-  outline: 2px solid transparent;
-  outline-offset: 2px;
+    outline: none;
 }
+
+
 
 @media (min-width: 768px) {
   .button-40 {
