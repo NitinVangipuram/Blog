@@ -91,24 +91,20 @@
           <!-- End Search -->
         </div>
       </div>
+<form action="/logout" method="post">
+      <button class="button-40" role="button"type="submit" >
+       Sign out
+      </button>
+</form>
     </nav>
     <!-- End Nav
 ================================================== -->
 
     <!-- Begin Site Title
 ================================================== -->
-    <div class="container">
-      <div class="mainheading">
-        <!-- <h1 class="sitetitle">PostIt</h1>
-        <p class="lead">
-          "A blog is a conversation, not a monologue." - Jeff Jarvis
-        </p> -->
-      </div>
-      <!-- End Site Title
-================================================== -->
+     <div class="container">
+      
 
-      <!-- Begin Featured
-	================================================== -->
       <section class="featured-posts">
         <div class="section-title">
           <h2><span>Featured</span></h2>
@@ -142,14 +138,16 @@
                     <div class="wrapfooter">
                       <span class="meta-footer-thumb">
                         <a href="author.html"
-                          ><img
-                          class="author-thumb"
-                          src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x"
-                          alt="Sal"</a>
+                          ></a>
+                          <% if (y) { %>
+                            <img class="author-thumb" src="<%=post.pi %>" alt="Profile Image " />
+                          <% } else { %>
+                            
+                          <% } %>
                       </span>
                       <span class="author-meta">
                         <span class="post-name"
-                          ><a href="author.html">Steve</a></span
+                          ><a href="author.html"><%= post.nm %></a></span
                         ><br />
                         <span class="post-date">22 July 2017</span
                         ><span class="dot"></span
@@ -172,17 +170,13 @@
 
           
       </section>
-      <!-- End Featured
-	================================================== -->
-
-      <!-- Begin List Posts
-	================================================== -->
+   
       <section class="recent-posts">
         <div class="section-title">
           <h2><span>All Stories</span></h2>
         </div>
         <div class="card-columns listrecent">
-          <!-- begin post -->
+         
 
           <%ps.forEach(function(post){%> <% if (typeof post.content ==
           'undefined' ) { %>
@@ -210,16 +204,23 @@
                 <div class="wrapfooter">
                   <span class="meta-footer-thumb">
                     <a href="author.html"
-                      ><img
+                      >
+                      <% if (y) { %>
+                        <img class="author-thumb" src="<%=post.pi %>" alt="Profile Image " />
+                      <% } else { %>
+                        <img
                         class="author-thumb"
                         src="https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x"
                         
-                    /></a>
+                    />
+                      <% } %>
+                      
+                      </a>
                   </span>
                   <span class="author-meta">
-                    <span class="post-name"><a href="author.html">Sal</a></span
+                    <span class="post-name"><a href="author.html"><%= post.nm%></a></span
                     ><br />
-                    <span class="post-date"><%=today%></span
+                    <span class="post-date"><%=post.time%></span
                     >
                     
                   </span>
@@ -263,41 +264,12 @@
               </div>
             </div>
           </div>
-          <!-- end post -->
+        
           <% } %> <%})%>
-          <!-- begin post -->
-
-          <!-- end post -->
-
-          <!-- begin post -->
-
-          <!-- end post -->
-
-          <!-- begin post -->
-
-          <!-- end post -->
-
-          <!-- begin post -->
-
-          <!-- end post -->
-
-          <!-- begin post -->
-
-          <!-- end post -->
+         
         </div>
       </section>
-      <!-- End List Posts
-	================================================== -->
-
-      <!-- Begin Footer
-	================================================== -->
-      <!-- <div class="footer">
-        <p class="pull-left">Copyright &copy; 2017 Your Website Name</p>
-        
-        <div class="clearfix"></div>
-      </div> -->
-      <!-- End Footer
-	================================================== -->
+      
     </div>
     <!-- /.container -->
 
