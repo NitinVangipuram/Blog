@@ -197,9 +197,11 @@ app.post('/logout', function(req, res, next) {
 app.get("/compose",function(req,res){
   if(req.isAuthenticated()){
     res.render("post");}
-  else{
-    res.redirect("/");
+    else{
+      res.redirect("/");
+    }
 })
+
 app.post("/compose", function (req, res) {
   upload(req, res, (err) => {
     if (err) {
