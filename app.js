@@ -197,13 +197,11 @@ app.post('/logout', function(req, res, next) {
 app.get("/compose",function(req,res){
     res.render("post");
 })
-
-app.post("/compose",function(req,res){
-  upload(req,res,(err)=>{
-    if(err){
-        console.log(err);
-    }
-    else{
+app.post("/compose", function (req, res) {
+  upload(req, res, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
       const x = req.user;
       const date = new Date();
       const options = {
@@ -212,37 +210,54 @@ app.post("/compose",function(req,res){
         day: "numeric",
       };
       const td = date.toLocaleString("en-IN", options);
-        const post = new Post({
-          
-            title:req.body.n,
-            content:req.body.c,
-            image:{
-                data:fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
-                contentType:'image/png',
-            },
-            featured:false,
-            pi :x.photos[0].value,
-            nm: x.displayName,
-            time:td
-            
-        })
-             post.save()
-             .then(() => res.redirect("/home"));}
 
+      const post = new Post({
+        title: req.body.n,
+        content: req.body.c,
+        image: {
+          data: fs.readFileSync(path.join(__dirname + '/uploads/' + req.file.filename)),
+          contentType: 'image/png',
+        },
+        featured: false,
+        time: td,
+      });
+
+      if (x && x.photos && x.photos.length > 0) {
+        post.pi = x.photos[0].value;
+      }
+      else{
+        post.pi = "https://www.gravatar.com/avatar/e56154546cf4be74e393c62d1ae9f9d4?s=250&amp;d=mm&amp;r=x"
+      }
+      if (x && x.displayName) {
+        post.nm = x.displayName;
+      }
+     else{
+      post.nm = "Anonymous"; 
+     }
+      post.save()
+        .then(() => res.redirect("/home"));
     }
-        )
-    }
-  )
+  });
+});
+
 app.get("/seper",function(req,res){
-  res.render("seper")
+  if(req.isAuthenticated()){
+  res.render("seper");}
+  else{
+    res.redirect("/");
+  }
 })
   
-  app.get("/seper/:postId", async function(req, res) {
+   app.get("/seper/:postId", async function(req, res) {
+    if(req.isAuthenticated()){
    
     const reqPostId = req.params.postId;
    
     const post = await Post.findOne({ _id: reqPostId });
-    res.render("seper", { he: post.title, be: post.content , post:post })
+    res.render("seper", { he: post.title, be: post.content , post:post })}
+    else{
+      res.redirect("/");
+    }
   });
   app.get("/home/:postId", async function(req, res) {
    
